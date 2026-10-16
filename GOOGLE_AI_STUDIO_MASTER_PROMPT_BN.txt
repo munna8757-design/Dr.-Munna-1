@@ -1,0 +1,75 @@
+DR. MUNNA ASSIST AI — MASTER IMPLEMENTATION PROMPT FOR GOOGLE AI STUDIO
+
+আপনি একজন senior Android engineer, AI integration engineer এবং QA engineer। আমার বিদ্যমান Dr. Munna Assist AI Android project-কে বাস্তব কাজ করা অ্যাপে উন্নত করুন। প্রথমে project files পড়ুন, বর্তমান architecture বুঝুন, তারপর ফাইল-ভিত্তিক পরিবর্তন দিন। কোনো feature শুধু UI-তে দেখিয়ে complete বলবেন না। Build/test করা না গেলে স্পষ্টভাবে বলবেন।
+
+PLATFORM / BUILD
+- Native Android APK project: Kotlin, Jetpack Compose, Material 3, Android Studio-compatible Gradle project.
+- Existing app package: com.munna.assistai; app name: Dr. Munna Assist AI.
+- Keep GitHub Actions debug APK workflow. Add tests and lint; fix compilation errors.
+- Google AI Studio may help generate/edit code, but do not claim it directly produces a signed native APK unless the current environment actually does. If a file cannot be edited directly, output its exact path and full contents.
+- Do not remove existing working features. Keep a CHANGELOG and FEATURE_STATUS.md.
+
+DESIGN
+- Premium dark interface with cyan/violet accents, responsive phone layout, Bengali and English support, accessibility labels, loading/error/empty states.
+- Home, AI Chat, Learn, Creation Studio, Phone & Notifications, Settings, Diagnostics.
+- Clearly distinguish real, demo, and not-yet-connected functionality.
+
+1) REALISTIC ADULT 3D AVATAR
+- The project now has a Three.js procedural 3D demo in Android-Starter/app/src/main/assets/avatar/index.html. Inspect it first. Improve it without claiming photorealism; for realistic human quality, integrate a user-provided/licensed rigged GLB/VRM model and document its licence. Do not remove the working fallback.
+- Avatar must have camera/orbit controls, idle animations, expressions, blink, mouth/lip movement synchronized to TTS when supported, and graceful fallback if the asset fails to load.
+- Outfit selector: sari, three-piece, casual, professional. Change actual 3D clothing only if the model includes compatible clothing meshes/rigs or validated swap assets. Clothing can be changed/removed as part of outfit animation only to another opaque, modest outfit; do not render nude/explicit anatomy.
+- Do not download unknown assets silently. Document licenses, asset source, file size, minimum Android requirements, and exact asset placement. If no model asset is supplied, show a clearly labelled 3D-integration-needed state, not a false claim.
+
+2) FAST CHAT LIKE A MODERN AI ASSISTANT
+- Stream responses if backend/provider supports streaming; otherwise show responsive progress, cancellation, timeout, retry, and clear error messages.
+- Use secure backend/proxy for Gemini or other providers. Never embed API keys in APK, assets, or repository.
+- Maintain conversation history locally with clear/delete/export controls and user-visible privacy notice. Add request cancellation, connection status, retry, and configurable response length.
+- Keep local/offline answers explicitly limited; never claim full offline generative AI unless a local model is integrated and tested.
+- Bengali and English input/output; voice input with Android SpeechRecognizer and TTS, with permissions and language fallback.
+
+3) TEXT-TO-GRAPHIC / IMAGE
+- Add prompt form, aspect ratio, style, progress, cancel/retry, result preview, save/share, and generation history.
+- Connect an actual image-generation API only after the user configures a supported provider on the backend. Handle provider policy errors, quota, content type, file size and network failures.
+- If no provider is configured, clearly say “Image generation provider not connected”; never generate fake placeholder images and call them AI results.
+
+4) TEXT-TO-VIDEO / CLIP TOOLS
+- Provide prompt, duration/aspect ratio where supported, job ID, progress polling, timeout, result playback, save/share and quota/error handling.
+- The backend now has POST /video, GET /video/status, and GET /video/download using GEMINI_VIDEO_MODEL (default veo-3.1-generate-preview). Verify current official REST schema and model access; do not pretend a video exists while only showing a spinner or sample. Clearly state provider availability, possible charges, waiting time and output limits.
+- Separate video generation from local editing. For local editing use a supported Android media library and implement trim/cut/export only if the dependency is buildable and tested. Add permission-safe media picker and export flow.
+- Music/audio generation is a separate provider integration and must be labelled unavailable until configured.
+
+5) NOTIFICATION READER
+- NotificationReaderService and an opt-in control have been added. Inspect and test the permission flow, confirm sensitive OTP/banking/payment hints are filtered, and never store or upload notification contents by default.
+- Read notification content only after explicit OS-level enablement and app-level opt-in. Do not store or upload notification contents by default. Let user choose allowed apps, pause/stop reading, and disable instantly. Avoid reading OTP, banking, or sensitive notification content aloud by default; provide filters.
+- Document Android restrictions and test with actual device; do not claim enabled until user grants access.
+
+6) MOBILE CONTROL / FLOATING ASSISTANT
+- For simple tasks, use safe Android intents (open app, dialer, SMS draft, share sheet) and always use user confirmation for communications or destructive actions.
+- AccessibilityService may be added only as an opt-in, clearly disclosed service. Explain why it is needed; show an enablement screen that opens Accessibility settings; no hidden control, credential capture, stealth taps, bypassing app security, or unauthorized account access. Implement an allow-list, visible action confirmation, emergency stop, and audit history without storing sensitive screen contents.
+- Floating overlay requires SYSTEM_ALERT_WINDOW special access and a foreground service where appropriate. Show a clear enable/disable switch and persistent notification; never draw over sensitive permission/payment screens; stop immediately when disabled.
+- Do not request SMS, contacts, call-log, location, or background permissions unless a specific implemented feature needs them. Never secretly record calls, spoof caller ID, track people from phone numbers, or bypass Android security.
+
+7) EDUCATION CENTER
+- Clinical, age-appropriate and scientifically grounded education: anatomy, body systems, reproductive anatomy, menstrual cycle, conception, pregnancy, consent, contraception, STI prevention, hygiene, and when to seek clinical care.
+- Use only licensed clinical 3D assets and cite asset/license in project documentation. No erotic presentation. Make clear this is education, not diagnosis.
+
+8) SOFTWARE BUILDER
+- Allow prompt-to-code drafts, syntax-highlighted editor, export/share files, and backend-powered code assistance. Run generated code only in an isolated, resource-limited build service after validation; never run arbitrary code directly on the user's phone without warning/consent.
+- APK/EXE build must connect to an actual CI/build service. Report build job status/logs and provide artifact links only when they exist. Do not claim to compile if no build job ran.
+
+9) PRIVACY / SECURITY
+- Keep provider keys server-side in environment secrets. Require HTTPS in production. Add authentication, per-user rate limits, quotas/cost caps, request-size limits, safe error messages, and privacy policy before public release.
+- Minimize local data. Give clear chat/history deletion. No secret recording, covert surveillance, unauthorized account access, caller-ID spoofing, or non-consensual location tracking.
+
+10) TESTING / ACCEPTANCE CHECKLIST
+- Run Gradle unit tests, Android lint, and assembleDebug in CI. Fix every verified failure and include logs/artifacts.
+- Add tests for backend URL validation, offline fallback, chat errors/timeouts, notification opt-in logic, permission-denied states, and Studio provider-not-configured states.
+- Verify navigation on all screens, Bengali/English strings, large font layout, rotation/process recreation, airplane mode, slow network, backend down, provider quota exceeded, and invalid API response.
+- Verify Notification Access and overlay permissions on a real Android device. Verify 3D asset loads and outfit changes on a real device. Verify image/video results are actual returned files and can be saved/shared.
+- Produce FEATURE_STATUS.md with each feature status: WORKING / NEEDS PROVIDER / NEEDS PERMISSION / NEEDS ASSET / DEMO ONLY / NOT IMPLEMENTED, test evidence, and known limitations.
+- Do not report “all features working” unless each acceptance test has actual evidence. Summarize remaining blockers and exact next steps.
+
+DELIVERY
+- Update source code in place; add missing Kotlin/XML/Gradle/backend files as necessary.
+- Include README_BN.md, setup steps for Google AI Studio and Android Studio/GitHub Actions, permissions guide, API setup guide, asset licensing guide, test results, and honest feature matrix.
+- First inspect the project and current feature matrix. Implement in small compile-checkable steps, correct any compile errors found, and preserve existing features. The project already contains a procedural 3D demo, image/video backend endpoints, notification reader and app-launcher intents; verify rather than duplicating them. Never delete unrelated files.

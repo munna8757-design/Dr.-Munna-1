@@ -1,0 +1,41 @@
+Build a polished project named "Dr. Munna Assist AI". First clarify whether the environment can create a native Android project. If it only supports web apps, create a responsive mobile-first web prototype and explain that it is not an APK; do not claim APK export unless actually supported.
+
+PRODUCT GOAL
+A multilingual personal AI assistant with Bengali and English UI, a friendly adult female assistant avatar, voice interaction, education, creation tools, and user-authorized phone integrations. Build a functional, honest first version; clearly label integrations that need external services.
+
+DESIGN
+- Dark futuristic UI, cyan and violet accents, rounded waterdrop-style cards/buttons, accessible typography.
+- Main navigation: Home, AI Chat, Learn, Creation Studio, Tools, Settings.
+- Avatar area with expression/voice-wave placeholder. Do not pretend a static placeholder is a live 3D avatar.
+- Outfit selector for modest outfits: sari, three-piece, casual, professional. Real 3D outfit changes require licensed 3D assets and an avatar runtime.
+
+FEATURES TO INCLUDE IN THE PROJECT
+1. AI chat in Bengali and English, conversation history, loading/error states, clear chat, copy/share.
+2. Voice input and text-to-speech with permission handling. If speech APIs are unavailable, show a clear disabled/integration-needed state.
+3. Avatar panel with selectable modest outfits and future 3D/lip-sync integration point.
+4. Educational Human Body Center: body systems, brain, heart, lungs, bones, muscles, adult reproductive anatomy, reproductive process, menstrual cycle, conception, pregnancy, consent, personal boundaries, contraception, STI prevention, hygiene, and when to consult a clinician. Use clinical, non-erotic educational diagrams only; use licensed verified assets.
+5. AI Creation Studio workflows for text, poems, lyrics, images, audio/music, video-from-text, cartoons and dance clips. Connect real external providers only when configured; otherwise show workflow mockups clearly marked as not yet connected.
+6. Software Builder workflow: idea → requirements → code workspace → tests/build status → export. Do not claim to compile APK/EXE unless a real build service is connected.
+7. Communication page: open Android dialer/SMS using user-confirmed actions. No spoofed caller ID.
+8. Notification reader design requiring explicit Android notification-access permission; ask before reading aloud.
+9. Floating assistant/overlay design requiring explicit Android overlay and foreground-service permissions. Respect platform restrictions.
+10. App control only via an explicitly enabled Android Accessibility Service and user-authorized actions. Explain that some actions may not work in all apps.
+11. Consent-based location sharing only after OS permission and clear user confirmation. Never track someone from their phone number or access private social accounts.
+12. Offline mode: local UI and saved notes should work offline. Label AI answers as unavailable offline unless a local model is actually integrated.
+13. Settings for language, voice, privacy, permissions, data deletion, theme, and connected providers.
+
+ENGINEERING REQUIREMENTS
+- Prefer Kotlin + Jetpack Compose + Material 3 for native Android if the environment truly supports it. Otherwise create a responsive web app and clearly identify it as web, not APK.
+- Separate UI, data, service, and permission layers.
+- Never hardcode API keys in client code. Use a secure backend/proxy for Gemini or other provider credentials.
+- Add only necessary permissions, explain each permission, and request at runtime when required.
+- Do not implement covert tracking, secret recording, caller-ID spoofing, or unauthorized account access.
+- Use realistic empty/loading/error states and make navigation work.
+- Include a README with exact build steps, required environment variables, integrations still missing, and known limitations.
+- Run available checks/builds and fix errors that can be verified in this environment. Do not claim successful compilation if no build was run.
+
+DELIVERABLES
+1. Complete source files supported by this environment.
+2. README with build/run instructions.
+3. Feature status table: working, demo/placeholder, requires API, requires Android permission, not implemented.
+4. If APK generation is not supported directly, give exact Android Studio or cloud-build steps rather than inventing an APK.

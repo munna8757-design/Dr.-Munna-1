@@ -1,0 +1,44 @@
+name: Verify Dr. Munna Assist AI package
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main, master ]
+permissions:
+  contents: read
+jobs:
+  verify-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check backend syntax and tests
+        run: |
+          python -m py_compile Backend-Gemini/main.py
+          cd Backend-Gemini && python -m unittest -v test_backend.py
+  build-android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - run: sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0"
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+      - name: Run tests, lint and build APK
+        working-directory: Android-Starter
+        run: |
+          gradle testDebugUnitTest --no-daemon
+          gradle lintDebug --no-daemon
+          gradle assembleDebug --no-daemon
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Dr-Munna-Assist-AI-debug-apk
+          path: Android-Starter/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 14
