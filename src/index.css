@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+:root {
+  --color-ink: #0b1020;
+  --color-panel: #151d33;
+  --color-panel-card: #1c2744;
+  --color-panel-light: #243257;
+  --color-cyan: #61e7f5;
+  --color-violet: #b59bff;
+  --color-gold: #ffd58a;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0b1020;
+}
+::-webkit-scrollbar-thumb {
+  background: #243257;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #61e7f5;
+}
+
+@keyframes wave {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  20%, 60% {
+    transform: rotate(14deg);
+  }
+  40%, 80% {
+    transform: rotate(-10deg);
+  }
+}
+
+.animate-wave {
+  animation: wave 1.2s ease-in-out infinite;
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 8s linear infinite;
+}

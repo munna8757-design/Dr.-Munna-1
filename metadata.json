@@ -1,0 +1,8 @@
+{
+  "name": "Dr. Munna Assist AI",
+  "description": "Cross-framework React rewrite of Dr. Munna Assist AI with 3D virtual assistant, Bengali voice chat, health education, AI studio, and mobile tools.",
+  "permissions": [],
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -1,41 +1,60 @@
-# Dr. Munna Assist AI — Android Starter
+# Dr. Munna Assist AI (React Application)
 
-**Project type:** Kotlin + Jetpack Compose Android app source. **This ZIP does not contain a built APK.**
+A cross-framework rewrite of Dr. Munna Assist AI ported from Android (Kotlin/Jetpack Compose) to a modern React 18 + TypeScript + Vite + Tailwind CSS web application, backed by Express and Google Gemini API.
 
-## What works in this starter
-- Native Android app shell and bottom navigation
-- Home screen and feature cards
-- Local demo chat (not connected to a live AI model)
-- Education Center topics for anatomy and evidence-based sexual/reproductive health
-- Clearly labelled placeholder pages for Creation Studio and Tools/Builder
+## Core Features Preserved & Enhanced
 
-## Not connected yet
-- Live Gemini/other AI answers, secure backend, and API credentials
-- Real-time 3D avatar, lip-sync, outfit assets, and avatar animation
-- Image/audio/video generation providers
-- Software build/export service
-- Notification reading, floating overlay, Accessibility Service app control, or location sharing
+1. **3D Virtual Assistant Character (Three.js)**
+   - Interactive procedural 3D avatar with real-time drag-to-rotate interaction, idle breathing animation, and zoom controls.
+   - Traditional and contemporary outfit switcher: শাড়ি (Sari), থ্রি-পিস (Three-piece), ক্যাজুয়াল (Casual), and প্রফেশনাল (Professional).
 
-Do not put a Gemini/API key in the Android app or public GitHub repository. Use a backend service to protect credentials.
+2. **AI Chat & Voice Interaction**
+   - Natural language conversation in Bengali and English.
+   - Web Speech API integration for speech-to-text dictation.
+   - SpeechSynthesis text-to-speech for vocalizing AI responses with Bengali voice support.
+   - Full offline rule-based fallback engine directly ported from `AssistantLogic.kt` with instant answers for greetings, health, and capability queries.
+   - Full-stack live Google Gemini API connectivity.
 
-## Build locally with Android Studio
-1. Install Android Studio and Android SDK Platform 35.
-2. Extract the ZIP.
-3. Android Studio → **Open** → select the `Android-Starter` folder (the folder containing `settings.gradle.kts`).
-4. Let Gradle sync finish. Use JDK 17 if Android Studio asks.
-5. Select **Build → Build Bundle(s) / APK(s) → Build APK(s)**.
-6. The debug APK should appear at `app/build/outputs/apk/debug/app-debug.apk` if the build succeeds.
+3. **Human Body & Health Education Center**
+   - Evidence-based, clinical, and respectful modules covering:
+     - Human Body Anatomy & Organ Systems (মস্তিষ্ক, হৃদ্‌যন্ত্র, ফুসফুস, হাড়, পেশি)
+     - Reproductive Anatomy & Biology (ডিম্বস্ফোটন, ঋতুচক্র, নিষেক ও গর্ভধারণ)
+     - Menstrual Cycle & Hygiene Management
+     - Consent & Healthy Relationships (স্বেচ্ছাপ্রণোদিত, প্রত্যাহারযোগ্য, ও সম্মানজনক)
+     - Contraception & STI Prevention
+     - Hygiene and Medical Consultation Guidelines
+     - Medical disclaimer emphasizing educational guidance over self-diagnosis.
 
-## Build APK in GitHub Actions (cloud build)
-1. Create a new empty repository on GitHub.
-2. Upload the **contents** of the `Android-Starter` folder to the repository root (not the parent ZIP folder). Include the hidden `.github` folder.
-3. Commit/push to `main` or `master`. The workflow at `.github/workflows/build-apk.yml` will run automatically. You can also go to **Actions → Build Dr. Munna Assist AI APK → Run workflow**.
-4. Open the completed workflow run, scroll to **Artifacts**, and download `Dr-Munna-Assist-AI-debug-apk`.
-5. Extract the artifact ZIP to get `app-debug.apk`, then transfer it to your Android phone and install it. Android may ask you to allow installation from that file app.
+4. **AI Creation Studio**
+   - Multimodal creation workspace supporting:
+     - Writing ("লেখা"): Poems (কবিতা), Stories (গল্প), Songs/Lyrics (গান), Social Posts (পোস্ট), Code (কোড), and Health Tips (স্বাস্থ্য).
+     - Images ("ছবি"): AI-generated illustrations via Gemini Image models with instant download.
+     - Videos ("ভিডিও"): Video prompt dispatch, asynchronous operation tracking, and status checking.
+     - One-click Copy to clipboard and Web Share API sharing.
 
-The workflow and source are provided, but the remote build has **not** run yet. GitHub will only produce the APK after you upload the source and the workflow succeeds. A debug APK is for testing, not a signed Play Store release.
+5. **Tools & Mobile Utilities**
+   - Quick App launcher shortcuts (YouTube, Facebook, Network & Bluetooth scanner).
+   - Opt-in Notification Reader with speech synthesis announcements.
+   - Phone dialer (`tel:`) and SMS draft composer (`sms:`).
+   - Multi-language Code Builder with templates for Kotlin, Python, and JavaScript.
 
-## Security and permissions
-- Do not add covert tracking, caller-ID spoofing, secret recording, or unauthorized account access.
-- Phone/SMS, notification reading, overlay, Accessibility Service, and location functions must be separately implemented with transparent explanations and user consent.
-- Educational reproductive anatomy and sexual-health content should remain clinical and age-appropriate, using verified/licensed educational assets.
+6. **Backend Settings & Diagnostics**
+   - Configurable remote backend URL and token, or built-in Express server proxy.
+   - Real-time health diagnostic checks for AI connectivity and model availability.
+
+## Tech Stack
+- **Frontend:** React 18, TypeScript, Tailwind CSS, Three.js, Lucide Icons, Vite
+- **Backend / Proxy:** Node.js, Express, tsx, `@google/genai`
+- **Port:** Dev server listening on port 3000
+
+## Development
+```bash
+npm install
+npm run dev
+```
+
+## Production Build
+```bash
+npm run build
+npm start
+```

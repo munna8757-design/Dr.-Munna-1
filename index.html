@@ -1,31 +1,43 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<style>
-*{box-sizing:border-box}body{margin:0;background:linear-gradient(160deg,#121a35,#192b45);font-family:system-ui,sans-serif;color:#fff;overflow:hidden}#stage{height:300px;width:100%;position:relative}#fallback{display:none;padding:24px;text-align:center;color:#d9e4ff}#controls{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;padding:5px 4px 10px}button{border:1px solid #6875a8;background:#26345b;color:white;border-radius:18px;padding:8px 11px;font-size:12px}button.active{background:#8060d9;border-color:#b6a0ff}#hint{text-align:center;font-size:10px;color:#b7c5e9;padding:0 8px 5px}
-</style></head><body><div id="stage"></div><div id="fallback">3D engine load হয়নি। ইন্টারনেট চালু করে আবার খুলুন।</div><div id="controls"><button data-outfit="sari">শাড়ি</button><button data-outfit="threepiece">থ্রি-পিস</button><button data-outfit="casual">ক্যাজুয়াল</button><button data-outfit="professional">প্রফেশনাল</button></div><div id="hint">3D demo character · drag to rotate · পোশাক বদলালে রঙ/স্টাইল বদলাবে</div>
-<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script><script>
-(()=>{
-const stage=document.getElementById('stage'); if(!window.THREE){document.getElementById('fallback').style.display='block';return;}
-const scene=new THREE.Scene();scene.background=new THREE.Color(0x182442);scene.fog=new THREE.Fog(0x182442,7,15);
-const camera=new THREE.PerspectiveCamera(34,stage.clientWidth/stage.clientHeight,.1,100);camera.position.set(0,1.55,6.7);
-const renderer=new THREE.WebGLRenderer({antialias:true,alpha:false});renderer.setPixelRatio(Math.min(devicePixelRatio,1.8));renderer.setSize(stage.clientWidth,stage.clientHeight);renderer.shadowMap.enabled=true;renderer.outputColorSpace=THREE.SRGBColorSpace;stage.appendChild(renderer.domElement);
-scene.add(new THREE.HemisphereLight(0xcfe5ff,0x503e63,2));const key=new THREE.DirectionalLight(0xffe4d1,3.1);key.position.set(3,5,4);scene.add(key);const rim=new THREE.PointLight(0x7d8cff,2.2);rim.position.set(-3,2,1);scene.add(rim);
-const root=new THREE.Group();scene.add(root);
-const mat=(c,rough=.7)=>new THREE.MeshStandardMaterial({color:c,roughness:rough});const skin=mat(0xc88d6d),hair=mat(0x201821),white=mat(0xf4f0ed),eye=mat(0x201a20),lip=mat(0x8b394a),gold=mat(0xd9b56f,.35);
-function mesh(g,m,x,y,z,sx=1,sy=1,sz=1){const o=new THREE.Mesh(g,m);o.position.set(x,y,z);o.scale.set(sx,sy,sz);o.castShadow=true;o.receiveShadow=true;root.add(o);return o}
-const sphere=new THREE.SphereGeometry(1,28,22),cyl=new THREE.CylinderGeometry(1,1,1,24),torsoGeo=new THREE.CapsuleGeometry(.42,.68,6,16);
-// stylized adult female-shaped avatar; intentionally clothed and non-photorealistic
-mesh(sphere,skin,0,1.75,0,.34,.43,.31);mesh(sphere,hair,0,2.01,-.055,.37,.29,.34);mesh(sphere,hair,-.27,1.79,-.01,.12,.38,.14);mesh(sphere,hair,.27,1.79,-.01,.12,.38,.14);
-mesh(sphere,white,-.12,1.78,.275,.065,.045,.035);mesh(sphere,white,.12,1.78,.275,.065,.045,.035);mesh(sphere,eye,-.12,1.78,.306,.025,.034,.016);mesh(sphere,eye,.12,1.78,.306,.025,.034,.016);mesh(sphere,skin,0,1.69,.30,.045,.07,.04);mesh(sphere,lip,0,1.60,.29,.075,.022,.025);
-mesh(cyl,skin,0,1.31,0,.12,.25,.12);const body=mesh(torsoGeo,mat(0x9a4e88),0,.77,0,.93,.95,.67);const waist=mesh(cyl,mat(0x9a4e88),0,.29,0,.42,.65,.28);
-const leftArm=mesh(cyl,skin,-.51,.76,0,.12,.75,.12);leftArm.rotation.z=-.18;const rightArm=mesh(cyl,skin,.51,.76,0,.12,.75,.12);rightArm.rotation.z=.18;
-mesh(sphere,skin,-.52,.35,.02,.13,.14,.13);mesh(sphere,skin,.52,.35,.02,.13,.14,.13);
-const legL=mesh(cyl,mat(0x313c64),-.19,-.25,0,.15,.78,.17);const legR=mesh(cyl,mat(0x313c64),.19,-.25,0,.15,.78,.17);mesh(sphere,mat(0x25263a),-.19,-.68,.09,.19,.11,.31);mesh(sphere,mat(0x25263a),.19,-.68,.09,.19,.11,.31);
-const drape=mesh(new THREE.ConeGeometry(.43,.95,4,1,true),mat(0xb34f8e),.19,.67,.08,.8,1,.38);drape.rotation.z=-.26;drape.visible=false;
-const scarf=mesh(new THREE.CylinderGeometry(.44,.56,.82,32,1,true),mat(0x9d4b88),0,.34,0,1,.7,.6);scarf.visible=false;
-const floor=new THREE.Mesh(new THREE.CircleGeometry(2.4,48),mat(0x202f50));floor.rotation.x=-Math.PI/2;floor.position.y=-.82;scene.add(floor);
-let dragging=false,lastX=0;renderer.domElement.addEventListener('pointerdown',e=>{dragging=true;lastX=e.clientX;renderer.domElement.setPointerCapture(e.pointerId)});renderer.domElement.addEventListener('pointermove',e=>{if(dragging){root.rotation.y+=(e.clientX-lastX)*.009;lastX=e.clientX}});renderer.domElement.addEventListener('pointerup',()=>dragging=false);
-function outfit(kind){const palette={sari:0x9b3d83,threepiece:0x237d83,casual:0x4a6ac7,professional:0x37445b};const c=palette[kind]||palette.sari;body.material.color.setHex(c);waist.material.color.setHex(c);scarf.material.color.setHex(c);drape.material.color.setHex(kind==='sari'?0xd8a4bd:c);drape.visible=kind==='sari';scarf.visible=kind==='threepiece';legL.material.color.setHex(kind==='casual'?0x354b8b:0x313c64);legR.material.color.copy(legL.material.color);document.querySelectorAll('button').forEach(b=>b.classList.toggle('active',b.dataset.outfit===kind));}
-document.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>outfit(b.dataset.outfit)));outfit('sari');
-let t=0;function animate(){requestAnimationFrame(animate);t+=.018;if(!dragging)root.rotation.y=Math.sin(t*.35)*.08;root.position.y=Math.sin(t)*.025;renderer.render(scene,camera)}animate();window.addEventListener('resize',()=>{camera.aspect=stage.clientWidth/stage.clientHeight;camera.updateProjectionMatrix();renderer.setSize(stage.clientWidth,stage.clientHeight)});
-})();</script></body></html>
+<html lang="bn" class="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Dr. Munna Assist AI</title>
+    <meta name="description" content="Cross-framework React rewrite of Dr. Munna Assist AI with 3D virtual assistant, Bengali voice chat, health education, AI studio, and mobile tools." />
+    <meta property="og:title" content="Dr. Munna Assist AI" />
+    <meta property="og:description" content="Cross-framework React rewrite of Dr. Munna Assist AI with 3D virtual assistant, Bengali voice chat, health education, AI studio, and mobile tools." />
+    
+    <!-- PWA & Mobile WebAPK Meta Tags -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#0b1020" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link rel="icon" type="image/png" href="/icon-192.png" />
+    <link rel="apple-touch-icon" href="/icon-192.png" />
+
+    <style>
+      body {
+        margin: 0;
+        background-color: #0b1020;
+        color: #ffffff;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        overflow-x: hidden;
+      }
+    </style>
+  </head>
+  <body class="bg-[#0b1020] text-white selection:bg-[#61e7f5] selection:text-black min-h-screen">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').catch((err) => {
+            console.warn('Service worker registration failed:', err);
+          });
+        });
+      }
+    </script>
+  </body>
+</html>
